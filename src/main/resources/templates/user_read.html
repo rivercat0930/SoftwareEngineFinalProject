@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>[[${user.firstName}]]</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" />
+
+</head>
+<body>
+<div class="container-fluid ">
+    <div class="text-center"><h2>[[${user.firstName}]]檔案</h2></div>
+    <form style="max-width: 500px; margin:0 auto;">
+        <div class="border border-secondary rounded p-3">
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label">Name</label>
+                <div class="col-sm-8">
+                    <div type="text" class="form-control"><h5>[[${user.firstName}]]</h5></div>
+                </div>
+                <label class="col-sm-4 col-form-label">Email</label>
+                <div class="col-sm-8">
+                    <div type="text" class="form-control"><h5>[[${user.Email}]]</h5></div>
+                </div>
+                <label class="col-sm-4 col-form-label">Phone</label>
+                <div class="col-sm-8">
+                    <div type="text" class="form-control"><h5>[[${user.Clas}]]</h5></div>
+                </div>
+            </div>
+        </div>
+    </form>
+    <div>
+        <table class="table table-bordered">
+            <thead class="thead-dark">
+            <tr>
+                <th>ID</th>
+
+                <th>Theme</th>
+
+                <th>Author</th> <!--add-->
+            </tr>
+            </thead>
+            <tbody>
+            <th:block th:each="article: ${listArticle}">
+                <tr th:if="${author} == ${article.author}">
+                    <td th:if="${author} == ${article.author}">[[${article.id}]]</td>
+
+                    <td th:if="${author} == ${article.author}">[[${article.theme}]]</td>
+
+                    <td th:if="${author} == ${article.author}">[[${article.author}]]<td> <!--add-->
+
+                    <a class="h4 mr-3" th:if="${author} == ${article.author}" th:href="@{'/article/read/'+ ${article.id}}">Read</a>
+                    <a class="h4 mr-3" th:if="${member} == ${article.author}" th:href="@{'/article/edit/'+ ${article.id}}">Edit</a>
+                    <a class="h4" th:if="${member} == ${article.author}" th:href="@{'/article/delete/'+ ${article.id}}">Delete</a>
+                </tr>
+            </th:block>
+            </tbody>
+        </table>
+    </div>
+    <div class="text-center">
+        <button onclick="history.back()" type="button" class="btn btn-secondary m-2">back</button>
+    </div>
+</div>
+</body>
+</html>

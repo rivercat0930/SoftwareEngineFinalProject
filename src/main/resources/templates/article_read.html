@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>[[${pageTitle}]]</title>
+  <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" />
+
+</head>
+<body>
+<div class="container-fluid ">
+  <div class="text-center"><h2>[[${pageTitle}]]</h2></div>
+  <form style="max-width: 500px; margin:0 auto;">
+    <div class="border border-secondary rounded p-3">
+      <div class="form-group row">
+        <label class="col-sm-4 col-form-label">Theme</label>
+        <div class="col-sm-8">
+          <div type="text" class="form-control"><h5>[[${article.theme}]]</h5></div>
+        </div>
+        <label class="col-sm-4 col-form-label">content</label>
+        <div>
+          <div type="text" class="form-control"><h5>[[${article.content}]]</h5></div>
+        </div>
+        <label class="col-sm-4 col-form-label">Author</label>
+        <div class="col-sm-8">
+          <div type="text" class="form-control"><h5>[[${article.author}]]</h5></div>
+        </div>
+      </div>
+      <div class="text-center">
+        <button onclick="history.back()" type="button" class="btn btn-secondary m-2">back</button>
+      </div>
+
+    </div>
+  </form>
+</div>
+</body>
+</html>

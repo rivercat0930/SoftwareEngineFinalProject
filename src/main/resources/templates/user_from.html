@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>[[${memberid}]]</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" />
+
+</head>
+<body>
+<div class="container-fluid ">
+   <div class="text-center"><h2>[[${pageTitle}]]</h2></div>
+    <form th:action="@{/users/save}" method="post" th:object="${user}"
+    style="max-width: 500px; margin:0 auto;">
+        <input type="hidden" th:field="*{id}">
+        <div class="border border-secondary rounded p-3">
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label">Name</label>
+                <div class="col-sm-8">
+                    <input type="text" th:field="*{firstName}" class="form-control" required minlength="2" maxlength="45"/>
+                </div>
+                <label class="col-sm-4 col-form-label">Email</label>
+                <div class="col-sm-8">
+                    <input type="text" th:field="*{email}" class="form-control" required minlength="2" maxlength="45"/>
+                </div>
+                <label class="col-sm-4 col-form-label">Phone</label>
+                <div class="col-sm-8">
+                    <input type="text" th:field="*{clas}" class="form-control" required minlength="2" maxlength="45"/>
+                </div>
+                <label class="col-sm-4 col-form-label">Password</label>
+                <div class="col-sm-8">
+                    <input type="text" th:field="*{password}" class="form-control" required minlength="2" maxlength="45"/>
+                </div>
+            </div>
+            <div class="text-center">
+                <button type="submit" class="btn btn-primary m-2">Save</button>
+                <button onclick="history.back()" type="button" class="btn btn-secondary m-2">Cancel</button>
+            </div>
+        </div>
+    </form>
+    <div>
+        <table class="table table-bordered">
+            <thead class="thead-dark">
+            <tr>
+                <th>ID</th>
+
+                <th>Theme</th>
+
+                <th>Author</th> <!--add-->
+            </tr>
+            </thead>
+            <tbody>
+            <th:block th:each="article: ${listArticle}">
+                <tr th:if="${membername} == ${article.author}">
+                    <td th:if="${membername} == ${article.author}">[[${article.id}]]</td>
+
+                    <td th:if="${membername} == ${article.author}">[[${article.theme}]]</td>
+
+                    <td th:if="${membername} == ${article.author}">[[${article.author}]]<td> <!--add-->
+
+                    <a class="h4 mr-3" th:if="${membername} == ${article.author}" th:href="@{'/article/read/'+ ${article.id}}">Read</a>
+                    <a class="h4 mr-3" th:if="${membername} == ${article.author}" th:href="@{'/article/edit/'+ ${article.id}}">Edit</a>
+                    <a class="h4" th:if="${membername} == ${article.author}" th:href="@{'/article/delete/'+ ${article.id}}">Delete</a>
+                </tr>
+            </th:block>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>
