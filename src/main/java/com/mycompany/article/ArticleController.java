@@ -1,103 +1,101 @@
-package SoftwareEngineFinalProject.article;
+package com.mycompany.article;
 
-import SoftwareEngineFinalProject.user.User;
-import SoftwareEngineFinalProject.user.UserController;
-import SoftwareEngineFinalProject.user.UserNotFoundException;
-import SoftwareEngineFinalProject.user.UserService;
+import com.mycompany.user.*;
+import org.aspectj.bridge.IMessageContext;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
+@Controller
+@Service
 public class ArticleController {
-    @Autowired
-    private ArticleService articleService;
 
     @Autowired
-    private UserService userService;
+    private ArticleService service;
+    @Autowired
+    private UserService serviceUser;
 
-    private ArticleRepository articleRepository;
+    private ArticleRepository repo;
+
+    public ArticleController() {
+    }
 
     @GetMapping("/articles")
     public String showArticleList(Model model) {
-        String member = UserController.getMemberName();
-        Integer memberId = UserController.getMemberId();
-        List<Article> articleList = articleService.listAll();
-
-        model.addAttribute("listArticle", articleList);
+        String member = UserController.getMemeberName();
+        Integer memberid = UserController.getMemeberid();
+        List<Article> listArticle = service.listAll();
+        model.addAttribute("listArticle", listArticle);
         model.addAttribute("member", member);
-        model.addAttribute("memberid", memberId);
-
+        model.addAttribute("memberid", memberid);
         return "articles";
     }
 
-    @GetMapping("article/new")
+    @GetMapping("/article/new")
     public String showNewFrom(Model model) {
-        String member = UserController.getMemberName();
-
+        String member = UserController.getMemeberName();
         model.addAttribute("article", new Article());
         model.addAttribute("member", member);
         model.addAttribute("pageTitle", "Add New Article");
-
         return "article_from";
     }
 
     @PostMapping("/article/save")
-    public String saveArticle(Article article, RedirectAttributes redirectAttributes) {
-        String member = UserController.getMemberName();
-
+    public String saveArticle(Article article, RedirectAttributes ra) {
+        String member = UserController.getMemeberName();
         article.setAuthor(member);
-        articleService.save(article);
-        redirectAttributes.addFlashAttribute("message", "The article has been saved successfully.");
-
+        service.save(article);
+        ra.addFlashAttribute("message", "The article has been saved successfully.");
         return "redirect:/articles";
     }
 
     @GetMapping("/article/edit/{id}")
-    public String showEditForm(@PathVariable("id") Integer id, Model model, RedirectAttributes redirectAttributes) {
+    public String showEditForm(@PathVariable("id") Integer id, Model model, RedirectAttributes ra) {
         try {
-            Article article = articleService.get(id);
+            Article article = service.get(id);
             model.addAttribute("article", article);
             model.addAttribute("pageTitle", "Edit Article (ID: " + id + ")");
 
             return "article_from";
         } catch (ArticleNotFoundException e) {
-            redirectAttributes.addFlashAttribute("message", e.getMessage());
-
+            ra.addFlashAttribute("message", e.getMessage());
             return "redirect:/articles";
         }
     }
 
     @GetMapping("/article/delete/{id}")
-    public String deleteArticle(@PathVariable("id") Integer id, RedirectAttributes redirectAttributes) {
+    public String deleteArticle(@PathVariable("id") Integer id, RedirectAttributes ra) {
         try {
-            articleService.delete(id);
-            redirectAttributes.addFlashAttribute("message", "The article id" + id + "has been deleted");
+            service.delete(id);
+            ra.addFlashAttribute("message", "The article id" + id + "has been deleted");
         } catch (ArticleNotFoundException e) {
-            redirectAttributes.addFlashAttribute("message", e.getMessage());
+            ra.addFlashAttribute("message", e.getMessage());
         }
-
         return "redirect:/articles";
+
     }
 
     @GetMapping("/article/read/{id}")
-    public String ReadArticle(@PathVariable("id") Integer id, Model model, RedirectAttributes redirectAttributes) {
+    public String ReadArticle(@PathVariable("id") Integer id, Model model, RedirectAttributes ra) {
         try {
-            Article article = articleService.get(id);
+            Article article = service.get(id);
             String a = article.getTheme();
-
             model.addAttribute("article", article);
             model.addAttribute("pageTitle", "Article");
 
             return "article_read";
         } catch (ArticleNotFoundException e) {
-            redirectAttributes.addFlashAttribute("message", e.getMessage());
-
+            ra.addFlashAttribute("message", e.getMessage());
             return "redirect:/articles";
         }
     }
@@ -109,30 +107,24 @@ public class ArticleController {
         User member;
         String a;
         String b;
-
         while (true) {
-            check = userService.getnum(id);
-
+            check = serviceUser.getnum(id);
             if (check == 1) {
-                member = userService.get(id);
+                member = serviceUser.get(id);
                 a = member.getFirstName();
                 b = name;
-
-                if (Objects.equals(a, b))
+                if (Objects.equals(a, b)) {
                     break;
+                }
             }
-
             id++;
         }
-
-        List<Article> listArticle = articleService.listAll();
-        String memberName = UserController.getMemberName();
-
+        List<Article> listArticle = service.listAll();
+        String membername = UserController.getMemeberName();
         model.addAttribute("listArticle", listArticle);
         model.addAttribute("user", member);
         model.addAttribute("author", name);
-        model.addAttribute("member", memberName);
-
+        model.addAttribute("member", membername);
         return "user_read";
     }
 }
