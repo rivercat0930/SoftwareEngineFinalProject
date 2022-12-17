@@ -1,6 +1,7 @@
 package com.mycompany.article;
 
 import com.mycompany.user.*;
+import com.mycompany.message.*;
 import org.aspectj.bridge.IMessageContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,10 +21,15 @@ import java.util.Optional;
 @Service
 public class ArticleController {
 
+    static String theme;
+    public static String gettheme(){return theme;}
     @Autowired
     private ArticleService service;
     @Autowired
     private UserService serviceUser;
+
+    @Autowired
+    private MessageService serviceMessage;
 
     private ArticleRepository repo;
 
@@ -88,10 +94,17 @@ public class ArticleController {
     @GetMapping("/article/read/{id}")
     public String ReadArticle(@PathVariable("id") Integer id, Model model, RedirectAttributes ra) {
         try {
+            String member = UserController.getMemeberName();
             Article article = service.get(id);
             String a = article.getTheme();
+            theme = a;
             model.addAttribute("article", article);
             model.addAttribute("pageTitle", "Article");
+            model.addAttribute("Theme", a);
+            model.addAttribute("new_message", new Message());
+            List<Message> listMessage = serviceMessage.listAll();
+            model.addAttribute("listMessage", listMessage);
+            model.addAttribute("member", member);
 
             return "article_read";
         } catch (ArticleNotFoundException e) {

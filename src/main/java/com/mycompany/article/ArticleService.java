@@ -1,7 +1,7 @@
 package com.mycompany.article;
 
-import com.mycompany.user.User;
-import com.mycompany.user.UserNotFoundException;
+import com.mycompany.article.Article;
+import com.mycompany.article.ArticleNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

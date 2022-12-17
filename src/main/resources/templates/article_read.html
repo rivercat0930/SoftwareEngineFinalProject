@@ -31,6 +31,42 @@
 
     </div>
   </form>
+  <div class="container-fluid text-center">
+    <h2>All Messages</h2>
+    <div class="alert-success text-center" th:if="${message}"></div>
+    <div>
+      <table class="table table-bordered">
+        <th:block th:each="message1: ${listMessage}">
+          <tr>
+            <td th:if="${Theme} == ${message1.theme}">
+              <a th:href="@{'/user/read/'+ ${message1.author}}">
+                [[${message1.author}]]
+              </a>
+            </td> <!--add-->
+            <td th:if="${Theme} == ${message1.theme}">[[${message1.content}]]</td>
+            <td th:if="${Theme} == ${message1.theme}">
+              <a class="h4" th:if="${member} == ${message1.author}" th:href="@{'/message/delete/'+ ${message1.id}}">Delete</a>
+            </td>
+          </tr>
+        </th:block>
+      </table>
+    </div>
+  </div>
+  <form th:action="@{/message/save}" method="post" th:object="${new_message}"
+        style="max-width: 500px; margin:0 auto;">
+    <input type="hidden" th:field="*{id}">
+    <div class="border border-secondary rounded p-3">
+      <div class="form-group row">
+        <label class="col-sm-4 col-form-label">Content</label>
+        <div class="col-sm-8">
+          <input type="text" th:field="*{content}" class="form-control" required minlength="2" maxlength="45"/>
+        </div>
+      </div>
+      <div class="text-center">
+        <button type="submit" class="btn btn-primary m-2">Save</button>
+      </div>
+    </div>
+  </form>
 </div>
 </body>
 </html>
